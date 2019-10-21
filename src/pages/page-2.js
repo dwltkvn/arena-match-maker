@@ -37,6 +37,14 @@ class SecondPage extends React.Component {
         <div>
           <input type="text" id="text_id" placeholder="Username" />
           <div>
+            <select name="mode">
+              <option value="brawl">Brawl</option>
+              <option value="jank">Jank</option>
+              <option value="pauper">Pauper</option>
+              <option value="singleton">Singleton</option>
+            </select>
+          </div>
+          <div>
             <button type="button">Register</button>
             <button type="button">Unregister</button>
           </div>
