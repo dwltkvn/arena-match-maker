@@ -9,6 +9,13 @@ const SecondPage = () => (
     <SEO title="Page two" />
     <h1>Hi from the second page</h1>
     <p>Welcome to page 2</p>
+    <div>
+      <input type="text" id="text_id" placeholder="Username" />
+      <div>
+        <button type="button">Register</button>
+        <button type="button">Unregister</button>
+      </div>
+    </div>
     <Link to="/">Go back to the homepage</Link>
   </Layout>
 )
