@@ -6,6 +6,8 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
+import firebase from "../components/myfb"
+
 class SecondPage extends React.Component {
   constructor(props) {
     super(props)
@@ -15,6 +17,14 @@ class SecondPage extends React.Component {
 
   componentDidMount() {
     //window.addEvetListen("event", this.handleEvent);
+    console.log("mount")
+    const v = firebase
+      .database()
+      .ref("/username/")
+      .once("value")
+      .then(snapshot => {
+        console.log(snapshot.val())
+      })
   }
 
   componentWillUnmount() {

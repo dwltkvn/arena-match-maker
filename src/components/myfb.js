@@ -10,6 +10,6 @@ var firebaseConfig = {
   appId: process.env.fb_appId,
   measurementId: process.env.fb_measurementId,
 }
-
+console.log(firebaseConfig)
 firebase.initializeApp(firebaseConfig)
 export default firebase
