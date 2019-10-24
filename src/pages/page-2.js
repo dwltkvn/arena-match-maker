@@ -14,35 +14,21 @@ class SecondPage extends React.Component {
     // this.handeEvent = this.handleEvent.bind(this);
     this.register = this.register.bind(this)
     this.unregister = this.unregister.bind(this)
+    this.waitForOpponent = this.waitForOpponent.bind(this)
     this.state = {
       stateUserRegistered: false,
     }
   }
 
   componentDidMount() {
-    //window.addEvetListen("event", this.handleEvent);
-    console.log("mount")
-    console.log(this.state.stateUserRegistered)
-    const v = firebase
-      .database()
-      .ref("/username/")
-      .once("value")
-      .then(snapshot => {
-        console.log(snapshot.val())
-      })
+    /* ... */
   }
 
   componentWillUnmount() {
     //window.removeEventListener("event",this.handleEvent);
   }
 
-  /*handleEvent(event)
-  {
-     ...
-  }*/
-
   register() {
-    //firebase.ref
     const username = this.refUserInput.value
     const mode = this.refModeSelect.value
     const fbpath = `${mode}/${username}`
@@ -52,8 +38,18 @@ class SecondPage extends React.Component {
     firebase
       .database()
       .ref(fbpath)
-      .set({ opponent: 0 })
-      .then(() => this.setState({ stateUserRegistered: true }))
+      .set({ opponent: "" })
+      .then(() => {
+        //this.waitForOpponent()
+        firebase
+          .database()
+          .ref(fbpath + "opponent/")
+          .on(
+            "value",
+            snapshot => (this.refOpponentInput.value = snapshot.val())
+          )
+        this.setState({ stateUserRegistered: true })
+      })
       .catch(error => this.setState({ stateUserRegistered: false }))
   }
 
@@ -66,9 +62,15 @@ class SecondPage extends React.Component {
     console.log(mode)
     firebase
       .database()
+      .ref(fbpath + "/opponent/")
+      .off()
+    firebase
+      .database()
       .ref(fbpath)
       .set({})
-      .then(() => this.setState({ stateUserRegistered: false }))
+      .then(() => {
+        this.setState({ stateUserRegistered: false })
+      })
       .catch(error => this.setState({ stateUserRegistered: true }))
   }
 
@@ -116,6 +118,13 @@ class SecondPage extends React.Component {
               Unregister
             </button>
           </div>
+          <input
+            type="text"
+            id="text_id"
+            placeholder="OpponentName"
+            ref={input => (this.refOpponentInput = input)}
+            disabled={true}
+          />
         </div>
         <Link to="/">Go back to the homepage</Link>
       </Layout>
