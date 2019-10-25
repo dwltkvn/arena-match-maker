@@ -65,6 +65,7 @@ class SecondPage extends React.Component {
       .set({})
       .then(() => {
         this.setState({ stateUserRegistered: false })
+        this.refOpponentInput.value = ""
       })
       .catch(error => this.setState({ stateUserRegistered: true }))
   }
