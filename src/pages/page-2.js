@@ -14,6 +14,7 @@ class SecondPage extends React.Component {
     // this.handeEvent = this.handleEvent.bind(this);
     this.register = this.register.bind(this)
     this.unregister = this.unregister.bind(this)
+    this.debug = this.debug.bind(this)
     this.state = {
       stateUserRegistered: false,
     }
@@ -70,6 +71,41 @@ class SecondPage extends React.Component {
       .catch(error => this.setState({ stateUserRegistered: true }))
   }
 
+  debug() {
+    console.log("debug")
+
+    const username = this.refUserInput.value
+    const mode = this.refModeSelect.value
+    const fbpath = `${mode}/${username}`
+
+    firebase
+      .database()
+      .ref(fbpath)
+      .once("value")
+      .then(snapshot => {
+        //const v = snapshot.val()
+        //const v = snapshot
+        //console.log(v)
+        //console.log(v.ref.parent)
+        //snapshot.ref.parent.once("value").then(snap => {
+        snapshot.ref.parent
+          .orderByChild("opponent")
+          .equalTo("")
+          .limitToFirst(1)
+          .once("value")
+          .then(snap => {
+            const vals = snap.val()
+            const keys = Object.keys(vals)
+            const max = keys.length
+            const r = Math.floor(Math.random() * Math.floor(max))
+
+            console.log(vals)
+            //console.log(r, keys[r])
+          })
+        //console.log(v.ref.parent)
+      })
+  }
+
   render() {
     //const {classes} = this.props;
     //const {myState} = this.state;
@@ -121,8 +157,11 @@ class SecondPage extends React.Component {
             ref={input => (this.refOpponentInput = input)}
             disabled={true}
           />
+          <button type="button" onClick={() => this.debug()}>
+            Debug
+          </button>
         </div>
-        <Link to="/">Go back to the homepage</Link>
+        <Link to="/">Go back to the homepage1</Link>
       </Layout>
     )
   }
