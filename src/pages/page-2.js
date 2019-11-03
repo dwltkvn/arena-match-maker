@@ -37,7 +37,7 @@ class SecondPage extends React.Component {
 
     const obj = {
       username: username,
-      opponent: "",
+      opponent: null,
     }
     firebase
       .database()
@@ -50,7 +50,12 @@ class SecondPage extends React.Component {
           .ref(fbpath)
           .on(
             "value",
-            snapshot => (this.refOpponentInput.value = snapshot.val().opponent)
+            snapshot =>
+              (this.refOpponentInput.value =
+                (snapshot.val() &&
+                  snapshot.val().opponent &&
+                  snapshot.val().opponent.username) ||
+                "")
           )
         this.setState({ stateUserRegistered: true })
       })
