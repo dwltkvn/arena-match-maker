@@ -15,6 +15,7 @@ class SecondPage extends React.Component {
     this.register = this.register.bind(this)
     this.unregister = this.unregister.bind(this)
     this.debug = this.debug.bind(this)
+    this.ts = 0
     this.state = {
       stateUserRegistered: false,
     }
@@ -31,20 +32,25 @@ class SecondPage extends React.Component {
   register() {
     const username = this.refUserInput.value
     const mode = this.refModeSelect.value
-    const fbpath = `${mode}/${username}`
+    this.ts = Date.now()
+    const fbpath = `${mode}/${this.ts}`
 
+    const obj = {
+      username: username,
+      opponent: "",
+    }
     firebase
       .database()
       .ref(fbpath)
-      .set({ opponent: "" })
+      .set(obj)
       .then(() => {
         //this.waitForOpponent()
         firebase
           .database()
-          .ref(fbpath + "/opponent/")
+          .ref(fbpath)
           .on(
             "value",
-            snapshot => (this.refOpponentInput.value = snapshot.val())
+            snapshot => (this.refOpponentInput.value = snapshot.val().opponent)
           )
         this.setState({ stateUserRegistered: true })
       })
@@ -52,13 +58,12 @@ class SecondPage extends React.Component {
   }
 
   unregister() {
-    const username = this.refUserInput.value
     const mode = this.refModeSelect.value
-    const fbpath = `${mode}/${username}`
+    const fbpath = `${mode}/${this.ts}`
 
     firebase
       .database()
-      .ref(fbpath + "/opponent/")
+      .ref(fbpath)
       .off()
     firebase
       .database()
@@ -67,6 +72,7 @@ class SecondPage extends React.Component {
       .then(() => {
         this.setState({ stateUserRegistered: false })
         this.refOpponentInput.value = ""
+        this.ts = 0
       })
       .catch(error => this.setState({ stateUserRegistered: true }))
   }
