@@ -33,6 +33,7 @@ const styles = {
   input: {
     marginLeft: 1 /*theme.spacing(1),*/,
     flex: 1,
+    borderColor: "green",
   },
   divider: {
     height: 28,
@@ -227,8 +228,7 @@ class SecondPage extends React.Component {
               Unregister
             </Button>
           </Box>
-
-          <Paper style={classes.root}>
+          <Box style={classes.root}>
             <TextField
               style={classes.input}
               id="filled-read-only-input"
@@ -243,11 +243,14 @@ class SecondPage extends React.Component {
                 shrink: true,
               }}
               disabled={false}
+              variant="outlined"
             />
             {this.state.stateSearchingForOpponent ? <CircularProgress /> : null}
-            <Divider orientation="vertical" style={classes.divider} />
-            <Button disabled={false}>Copy</Button>
-          </Paper>
+            {this.state.stateUserRegistered &&
+            !this.state.stateSearchingForOpponent ? (
+              <Button>Copy</Button>
+            ) : null}
+          </Box>
         </Container>
       </Layout>
     )
