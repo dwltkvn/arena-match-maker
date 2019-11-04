@@ -8,8 +8,41 @@ import SEO from "../components/seo"
 
 import firebase from "../components/myfb"
 
+import { withStyles } from "@material-ui/core/styles"
+
 import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
+import InputLabel from "@material-ui/core/InputLabel"
+import FormControl from "@material-ui/core/FormControl"
+import Select from "@material-ui/core/Select"
+import MenuItem from "@material-ui/core/MenuItem"
+import Container from "@material-ui/core/Container"
+import Box from "@material-ui/core/Box"
+import CircularProgress from "@material-ui/core/CircularProgress"
+
+import Paper from "@material-ui/core/Paper"
+import InputBase from "@material-ui/core/InputBase"
+import Divider from "@material-ui/core/Divider"
+
+const styles = {
+  root: {
+    padding: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    //width: 400,
+  },
+  input: {
+    marginLeft: 1 /*theme.spacing(1),*/,
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+}
 
 class SecondPage extends React.Component {
   constructor(props) {
@@ -21,6 +54,7 @@ class SecondPage extends React.Component {
     this.ts = 0
     this.state = {
       stateUserRegistered: false,
+      stateModeSelect: "brawl",
     }
   }
 
@@ -34,7 +68,8 @@ class SecondPage extends React.Component {
 
   register() {
     const username = this.refUserInput.value
-    const mode = this.refModeSelect.value
+    //const mode = this.refModeSelect.value
+    const mode = this.state.stateModeSelect
     this.ts = Date.now()
     const fbpath = `${mode}/${this.ts}`
 
@@ -66,7 +101,7 @@ class SecondPage extends React.Component {
   }
 
   unregister() {
-    const mode = this.refModeSelect.value
+    const mode = this.state.stateModeSelect
     const fbpath = `${mode}/${this.ts}`
 
     firebase
@@ -87,7 +122,7 @@ class SecondPage extends React.Component {
 
   debug() {
     console.log("debug")
-    console.log(this.email.value)
+    console.log(this.email)
     return
 
     const username = this.refUserInput.value
@@ -125,64 +160,97 @@ class SecondPage extends React.Component {
   render() {
     //const {classes} = this.props;
     //const {myState} = this.state;
+    //const { classes } = this.props
+    const classes = styles
+
     return (
       <Layout>
         <SEO title="Page two" />
         <h1>Hi from the second page</h1>
         <p>Welcome to Match Maker</p>
         <div>
-          <Button variant="contained" color="primary">
-            Hello World
-          </Button>
-          <TextField
-            id="filled-basic"
-            label="Filled"
-            margin="normal"
-            variant="filled"
-            inputRef={el => (this.email = el)}
-          />
-          <input
-            type="text"
-            id="text_id"
-            placeholder="Username"
-            ref={input => (this.refUserInput = input)}
-            disabled={this.state.stateUserRegistered}
-          />
-          <div>
-            <select
-              name="mode"
-              ref={select => (this.refModeSelect = select)}
+          <Container maxWidth="sm">
+            <TextField
+              id="filled-basic"
+              label="MTGA Username"
+              margin="normal"
+              variant="filled"
+              inputRef={el => (this.refUserInput = el)}
               disabled={this.state.stateUserRegistered}
+              fullWidth
+            />
+
+            <FormControl variant="filled" fullWidth>
+              <InputLabel htmlFor="age-native-helper">Mode</InputLabel>
+              <Select
+                onChange={e =>
+                  this.setState({ stateModeSelect: e.target.value })
+                }
+                disabled={this.state.stateUserRegistered}
+                value={this.state.stateModeSelect}
+              >
+                <MenuItem value="brawl">Brawl</MenuItem>
+                <MenuItem value="jank">Jank</MenuItem>
+                <MenuItem value="pauper">Pauper</MenuItem>
+                <MenuItem value="artisan">Artisan</MenuItem>
+              </Select>
+            </FormControl>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "20px",
+              }}
             >
-              <option value="brawl">Brawl</option>
-              <option value="jank">Jank</option>
-              <option value="pauper">Pauper</option>
-              <option value="singleton">Singleton</option>
-            </select>
-          </div>
-          <div>
-            <button
-              type="button"
-              onClick={() => this.register()}
-              disabled={this.state.stateUserRegistered}
-            >
-              Register
-            </button>
-            <button
-              type="button"
-              onClick={() => this.unregister()}
-              disabled={!this.state.stateUserRegistered}
-            >
-              Unregister
-            </button>
-          </div>
-          <input
-            type="text"
-            id="text_id"
-            placeholder="OpponentName"
-            ref={input => (this.refOpponentInput = input)}
-            disabled={true}
-          />
+              <Button
+                variant="contained"
+                onClick={() => this.register()}
+                disabled={this.state.stateUserRegistered}
+                color="primary"
+              >
+                Register
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => this.unregister()}
+                disabled={!this.state.stateUserRegistered}
+                color="secondary"
+              >
+                Unregister
+              </Button>
+            </Box>
+            <Box style={{ display: "flex", alignItems: "center" }}>
+              <TextField
+                id="filled-basic"
+                label="MTGA Opponent Username"
+                margin="normal"
+                variant="filled"
+                inputRef={el => (this.refOpponentInput = el)}
+                disabled={true}
+                fullWidth
+              />
+              {this.state.stateUserRegistered ? (
+                <Button disabled={false}>Copy</Button>
+              ) : (
+                <CircularProgress />
+              )}
+            </Box>
+            <Paper style={classes.root}>
+              <InputBase
+                placeholder={"MTGA Opponent Username"}
+                inputProps={{ "aria-label": "search google maps" }}
+                style={classes.input}
+              />
+              {this.state.stateUserRegistered ? (
+                <CircularProgress />
+              ) : (
+                <CircularProgress />
+              )}
+              <Divider orientation="vertical" style={classes.divider} />
+              <Button disabled={false}>Copy</Button>
+            </Paper>
+          </Container>
+
           <button type="button" onClick={() => this.debug()}>
             Debug
           </button>
@@ -192,4 +260,4 @@ class SecondPage extends React.Component {
     )
   }
 }
-export default SecondPage
+export default withStyles(styles)(SecondPage)
