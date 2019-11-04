@@ -35,9 +35,6 @@ const styles = {
     marginLeft: 1 /*theme.spacing(1),*/,
     flex: 1,
   },
-  iconButton: {
-    padding: 10,
-  },
   divider: {
     height: 28,
     margin: 4,
@@ -55,6 +52,8 @@ class SecondPage extends React.Component {
     this.state = {
       stateUserRegistered: false,
       stateModeSelect: "brawl",
+      stateOpponentUsername: undefined,
+      stateSearchingForOpponent: false,
     }
   }
 
@@ -89,13 +88,19 @@ class SecondPage extends React.Component {
           .on(
             "value",
             snapshot =>
-              (this.refOpponentInput.value =
-                (snapshot.val() &&
-                  snapshot.val().opponent &&
-                  snapshot.val().opponent.username) ||
-                "")
+              (snapshot.val() &&
+                snapshot.val().opponent &&
+                snapshot.val().opponent.username &&
+                this.setState({
+                  stateOpponentUsername: snapshot.val().opponent.username,
+                  stateSearchingForOpponent: false,
+                })) ||
+              ""
           )
-        this.setState({ stateUserRegistered: true })
+        this.setState({
+          stateUserRegistered: true,
+          stateSearchingForOpponent: true,
+        })
       })
       .catch(error => this.setState({ stateUserRegistered: false }))
   }
@@ -113,11 +118,18 @@ class SecondPage extends React.Component {
       .ref(fbpath)
       .set({})
       .then(() => {
-        this.setState({ stateUserRegistered: false })
-        this.refOpponentInput.value = ""
+        this.setState({
+          stateUserRegistered: false,
+          stateOpponentUsername: "oko",
+          stateSearchingForOpponent: false,
+        })
         this.ts = 0
       })
-      .catch(error => this.setState({ stateUserRegistered: true }))
+      .catch(error =>
+        this.setState({
+          stateUserRegistered: true,
+        })
+      )
   }
 
   debug() {
@@ -166,96 +178,77 @@ class SecondPage extends React.Component {
     return (
       <Layout>
         <SEO title="Page two" />
-        <h1>Hi from the second page</h1>
-        <p>Welcome to Match Maker</p>
-        <div>
-          <Container maxWidth="sm">
-            <TextField
-              id="filled-basic"
-              label="MTGA Username"
-              margin="normal"
-              variant="filled"
-              inputRef={el => (this.refUserInput = el)}
+        <Container maxWidth="sm">
+          <TextField
+            id="filled-basic"
+            label="Your MTGA Tag"
+            margin="normal"
+            variant="filled"
+            inputRef={el => (this.refUserInput = el)}
+            disabled={this.state.stateUserRegistered}
+            fullWidth
+          />
+
+          <FormControl variant="filled" fullWidth>
+            <InputLabel htmlFor="age-native-helper">MTGA Mode</InputLabel>
+            <Select
+              onChange={e => this.setState({ stateModeSelect: e.target.value })}
               disabled={this.state.stateUserRegistered}
-              fullWidth
-            />
-
-            <FormControl variant="filled" fullWidth>
-              <InputLabel htmlFor="age-native-helper">Mode</InputLabel>
-              <Select
-                onChange={e =>
-                  this.setState({ stateModeSelect: e.target.value })
-                }
-                disabled={this.state.stateUserRegistered}
-                value={this.state.stateModeSelect}
-              >
-                <MenuItem value="brawl">Brawl</MenuItem>
-                <MenuItem value="jank">Jank</MenuItem>
-                <MenuItem value="pauper">Pauper</MenuItem>
-                <MenuItem value="artisan">Artisan</MenuItem>
-              </Select>
-            </FormControl>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-around",
-                marginTop: "20px",
-              }}
+              value={this.state.stateModeSelect}
             >
-              <Button
-                variant="contained"
-                onClick={() => this.register()}
-                disabled={this.state.stateUserRegistered}
-                color="primary"
-              >
-                Register
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => this.unregister()}
-                disabled={!this.state.stateUserRegistered}
-                color="secondary"
-              >
-                Unregister
-              </Button>
-            </Box>
-            <Box style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                id="filled-basic"
-                label="MTGA Opponent Username"
-                margin="normal"
-                variant="filled"
-                inputRef={el => (this.refOpponentInput = el)}
-                disabled={true}
-                fullWidth
-              />
-              {this.state.stateUserRegistered ? (
-                <Button disabled={false}>Copy</Button>
-              ) : (
-                <CircularProgress />
-              )}
-            </Box>
-            <Paper style={classes.root}>
-              <InputBase
-                placeholder={"MTGA Opponent Username"}
-                inputProps={{ "aria-label": "search google maps" }}
-                style={classes.input}
-              />
-              {this.state.stateUserRegistered ? (
-                <CircularProgress />
-              ) : (
-                <CircularProgress />
-              )}
-              <Divider orientation="vertical" style={classes.divider} />
-              <Button disabled={false}>Copy</Button>
-            </Paper>
-          </Container>
+              <MenuItem value="brawl">Brawl</MenuItem>
+              <MenuItem value="jank">Jank</MenuItem>
+              <MenuItem value="pauper">Pauper</MenuItem>
+              <MenuItem value="artisan">Artisan</MenuItem>
+            </Select>
+          </FormControl>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => this.register()}
+              disabled={this.state.stateUserRegistered}
+              color="primary"
+            >
+              Register
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => this.unregister()}
+              disabled={!this.state.stateUserRegistered}
+              color="secondary"
+            >
+              Unregister
+            </Button>
+          </Box>
 
-          <button type="button" onClick={() => this.debug()}>
-            Debug
-          </button>
-        </div>
-        <Link to="/">Go back to the homepage1</Link>
+          <Paper style={classes.root}>
+            <TextField
+              style={classes.input}
+              id="filled-read-only-input"
+              label="Opponent MTGA Tag"
+              defaultValue={this.state.stateOpponentUsername}
+              value={this.state.stateOpponentUsername}
+              margin="normal"
+              InputProps={{
+                readOnly: true,
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              disabled={false}
+            />
+            {this.state.stateSearchingForOpponent ? <CircularProgress /> : null}
+            <Divider orientation="vertical" style={classes.divider} />
+            <Button disabled={false}>Copy</Button>
+          </Paper>
+        </Container>
       </Layout>
     )
   }
