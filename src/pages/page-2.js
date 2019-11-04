@@ -8,6 +8,9 @@ import SEO from "../components/seo"
 
 import firebase from "../components/myfb"
 
+import Button from "@material-ui/core/Button"
+import TextField from "@material-ui/core/TextField"
+
 class SecondPage extends React.Component {
   constructor(props) {
     super(props)
@@ -84,6 +87,8 @@ class SecondPage extends React.Component {
 
   debug() {
     console.log("debug")
+    console.log(this.email.value)
+    return
 
     const username = this.refUserInput.value
     const mode = this.refModeSelect.value
@@ -126,6 +131,16 @@ class SecondPage extends React.Component {
         <h1>Hi from the second page</h1>
         <p>Welcome to Match Maker</p>
         <div>
+          <Button variant="contained" color="primary">
+            Hello World
+          </Button>
+          <TextField
+            id="filled-basic"
+            label="Filled"
+            margin="normal"
+            variant="filled"
+            inputRef={el => (this.email = el)}
+          />
           <input
             type="text"
             id="text_id"
