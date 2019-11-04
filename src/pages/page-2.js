@@ -21,7 +21,6 @@ import Box from "@material-ui/core/Box"
 import CircularProgress from "@material-ui/core/CircularProgress"
 
 import Paper from "@material-ui/core/Paper"
-import InputBase from "@material-ui/core/InputBase"
 import Divider from "@material-ui/core/Divider"
 
 const styles = {
@@ -52,7 +51,7 @@ class SecondPage extends React.Component {
     this.state = {
       stateUserRegistered: false,
       stateModeSelect: "brawl",
-      stateOpponentUsername: undefined,
+      stateOpponentUsername: "",
       stateSearchingForOpponent: false,
     }
   }
@@ -120,10 +119,11 @@ class SecondPage extends React.Component {
       .then(() => {
         this.setState({
           stateUserRegistered: false,
-          stateOpponentUsername: "oko",
+          stateOpponentUsername: "",
           stateSearchingForOpponent: false,
         })
         this.ts = 0
+        console.log("unreg")
       })
       .catch(error =>
         this.setState({
