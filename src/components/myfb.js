@@ -11,6 +11,11 @@ var firebaseConfig = {
   measurementId: process.env.GATSBY_fb_measurementId,
 }
 
-console.log(firebaseConfig)
-firebase.initializeApp(firebaseConfig)
+const isWindow = typeof window !== "undefined" && window
+
+if (isWindow) {
+  console.log(firebaseConfig)
+  firebase.initializeApp(firebaseConfig)
+}
+
 export default firebase
