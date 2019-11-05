@@ -29,3 +29,19 @@ exports.onPreBootstrap = () => {
     console.log("prod env saved")
   })
 }
+
+exports.onCreateWebpackConfig = ({ actions, stage }) => {
+  if (stage === "build-html") {
+    console.log(" +++ onCreateWebpackConfig/build-html")
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /firebase/,
+            use: ["null-loader"],
+          },
+        ],
+      },
+    })
+  }
+}

@@ -10,6 +10,7 @@ var firebaseConfig = {
   appId: process.env.GATSBY_fb_appId,
   measurementId: process.env.GATSBY_fb_measurementId,
 }
+
 console.log(firebaseConfig)
 firebase.initializeApp(firebaseConfig)
 export default firebase
