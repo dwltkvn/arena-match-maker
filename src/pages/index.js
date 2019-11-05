@@ -5,7 +5,7 @@ import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
-const key = "hh" + process.env.fb_projectId
+const key = "hh" + process.env.GATSBY_fb_projectId
 
 const IndexPage = () => (
   <Layout>
