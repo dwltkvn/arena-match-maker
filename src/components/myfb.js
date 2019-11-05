@@ -1,4 +1,6 @@
-import firebase from "firebase"
+//import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/database"
 
 var firebaseConfig = {
   apiKey: process.env.GATSBY_fb_apiKey,

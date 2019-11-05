@@ -1,7 +1,5 @@
 import React from "react"
-import PropTypes from "prop-types"
-
-import { Link } from "gatsby"
+//import PropTypes from "prop-types"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -18,11 +16,7 @@ import Select from "@material-ui/core/Select"
 import MenuItem from "@material-ui/core/MenuItem"
 import Container from "@material-ui/core/Container"
 import Box from "@material-ui/core/Box"
-import CircularProgress from "@material-ui/core/CircularProgress"
 import LinearProgress from "@material-ui/core/LinearProgress"
-
-import Paper from "@material-ui/core/Paper"
-import Divider from "@material-ui/core/Divider"
 
 const styles = {
   root: {
@@ -135,39 +129,6 @@ class SecondPage extends React.Component {
 
   debug() {
     console.log("debug")
-    console.log(this.email)
-    return
-
-    const username = this.refUserInput.value
-    const mode = this.refModeSelect.value
-    const fbpath = `${mode}/${username}`
-
-    firebase
-      .database()
-      .ref(fbpath)
-      .once("value")
-      .then(snapshot => {
-        //const v = snapshot.val()
-        //const v = snapshot
-        //console.log(v)
-        //console.log(v.ref.parent)
-        //snapshot.ref.parent.once("value").then(snap => {
-        snapshot.ref.parent
-          .orderByChild("opponent")
-          .equalTo("")
-          .limitToFirst(1)
-          .once("value")
-          .then(snap => {
-            const vals = snap.val()
-            const keys = Object.keys(vals)
-            const max = keys.length
-            const r = Math.floor(Math.random() * Math.floor(max))
-
-            console.log(vals)
-            //console.log(r, keys[r])
-          })
-        //console.log(v.ref.parent)
-      })
   }
 
   render() {
