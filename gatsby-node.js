@@ -14,6 +14,7 @@ exports.onPreBootstrap = () => {
       process.env.hasOwnProperty(propertyName) &&
       ~propertyName.indexOf("GATSBY_")
     ) {
+      console.log(" +++ ", propertyName)
       secrets += `${propertyName}=${process.env[propertyName]}\n`
     }
   }
@@ -22,5 +23,9 @@ exports.onPreBootstrap = () => {
   fs.writeFile(".env.development", secrets, err => {
     if (err) throw err
     console.log("Dev env saved")
+  })
+  fs.writeFile(".env.production", secrets, err => {
+    if (err) throw err
+    console.log("prod env saved")
   })
 }
