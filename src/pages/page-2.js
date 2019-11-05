@@ -19,6 +19,7 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Container from "@material-ui/core/Container"
 import Box from "@material-ui/core/Box"
 import CircularProgress from "@material-ui/core/CircularProgress"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 import Paper from "@material-ui/core/Paper"
 import Divider from "@material-ui/core/Divider"
@@ -124,7 +125,6 @@ class SecondPage extends React.Component {
           stateSearchingForOpponent: false,
         })
         this.ts = 0
-        console.log("unreg")
       })
       .catch(error =>
         this.setState({
@@ -228,12 +228,12 @@ class SecondPage extends React.Component {
               Unregister
             </Button>
           </Box>
+          {this.state.stateSearchingForOpponent ? <LinearProgress /> : null}
           <Box style={classes.root}>
             <TextField
               style={classes.input}
               id="filled-read-only-input"
               label="Opponent MTGA Tag"
-              defaultValue={this.state.stateOpponentUsername}
               value={this.state.stateOpponentUsername}
               margin="normal"
               InputProps={{
@@ -245,7 +245,6 @@ class SecondPage extends React.Component {
               disabled={false}
               variant="outlined"
             />
-            {this.state.stateSearchingForOpponent ? <CircularProgress /> : null}
             {this.state.stateUserRegistered &&
             !this.state.stateSearchingForOpponent ? (
               <Button>Copy</Button>
