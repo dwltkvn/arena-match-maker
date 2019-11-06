@@ -54,6 +54,15 @@ class SecondPage extends React.Component {
 
   componentDidMount() {
     /* ... */
+    if (typeof Storage !== "undefined") {
+      // Code for localStorage/sessionStorage.
+      console.log("Storage available")
+      const prevUsername = localStorage.getItem("username")
+      if (prevUsername) this.refUserInput.value = prevUsername
+
+      const prevGamemode = localStorage.getItem("gamemode")
+      if (prevGamemode) this.setState({ stateModeSelect: prevGamemode })
+    }
   }
 
   componentWillUnmount() {
@@ -66,6 +75,9 @@ class SecondPage extends React.Component {
     const mode = this.state.stateModeSelect
     this.ts = Date.now()
     const fbpath = `${mode}/${this.ts}`
+
+    localStorage.setItem("username", username)
+    localStorage.setItem("gamemode", mode)
 
     const obj = {
       username: username,
@@ -142,12 +154,17 @@ class SecondPage extends React.Component {
         <SEO title="Page two" />
         <Container maxWidth="sm">
           <TextField
+            style={classes.input}
             id="filled-basic"
             label="Your MTGA Tag"
             margin="normal"
-            variant="filled"
+            variant="outlined"
+            placeholder="Type your MTG Arean TAG here"
             inputRef={el => (this.refUserInput = el)}
             disabled={this.state.stateUserRegistered}
+            InputLabelProps={{
+              shrink: true,
+            }}
             fullWidth
           />
 
