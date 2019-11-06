@@ -6,8 +6,6 @@ import SEO from "../components/seo"
 
 import firebase from "../components/myfb"
 
-import { withStyles } from "@material-ui/core/styles"
-
 import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
 import InputLabel from "@material-ui/core/InputLabel"
@@ -17,6 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Container from "@material-ui/core/Container"
 import Box from "@material-ui/core/Box"
 import LinearProgress from "@material-ui/core/LinearProgress"
+import Fade from "@material-ui/core/Fade"
 
 const styles = {
   root: {
@@ -36,7 +35,7 @@ const styles = {
   },
 }
 
-class SecondPage extends React.Component {
+class MAMMPage extends React.Component {
   constructor(props) {
     super(props)
     // this.handeEvent = this.handleEvent.bind(this);
@@ -49,11 +48,12 @@ class SecondPage extends React.Component {
       stateModeSelect: "brawl",
       stateOpponentUsername: "",
       stateSearchingForOpponent: false,
+      stateComponentMounted: false,
     }
   }
 
   componentDidMount() {
-    /* ... */
+    this.setState({ stateComponentMounted: true })
     if (typeof Storage !== "undefined") {
       // Code for localStorage/sessionStorage.
       console.log("Storage available")
@@ -151,86 +151,90 @@ class SecondPage extends React.Component {
 
     return (
       <Layout>
-        <SEO title="Page two" />
-        <Container maxWidth="sm">
-          <TextField
-            style={classes.input}
-            id="filled-basic"
-            label="Your MTGA Tag"
-            margin="normal"
-            variant="outlined"
-            placeholder="Type your MTG Arean TAG here"
-            inputRef={el => (this.refUserInput = el)}
-            disabled={this.state.stateUserRegistered}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            fullWidth
-          />
-
-          <FormControl variant="filled" fullWidth>
-            <InputLabel htmlFor="age-native-helper">MTGA Mode</InputLabel>
-            <Select
-              onChange={e => this.setState({ stateModeSelect: e.target.value })}
-              disabled={this.state.stateUserRegistered}
-              value={this.state.stateModeSelect}
-            >
-              <MenuItem value="brawl">Brawl</MenuItem>
-              <MenuItem value="jank">Jank</MenuItem>
-              <MenuItem value="pauper">Pauper</MenuItem>
-              <MenuItem value="artisan">Artisan</MenuItem>
-            </Select>
-          </FormControl>
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginTop: "20px",
-              marginBottom: "20px",
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => this.register()}
-              disabled={this.state.stateUserRegistered}
-              color="primary"
-            >
-              Register
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => this.unregister()}
-              disabled={!this.state.stateUserRegistered}
-              color="secondary"
-            >
-              Unregister
-            </Button>
-          </Box>
-          {this.state.stateSearchingForOpponent ? <LinearProgress /> : null}
-          <Box style={classes.root}>
+        <SEO title="MAMM" />
+        <Fade in={true} timeout={500}>
+          <Container maxWidth="sm">
             <TextField
               style={classes.input}
-              id="filled-read-only-input"
-              label="Opponent MTGA Tag"
-              value={this.state.stateOpponentUsername}
+              id="filled-basic"
+              label="Your MTGA Tag"
               margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
+              variant="outlined"
+              placeholder="Type your MTG Arean TAG here"
+              inputRef={el => (this.refUserInput = el)}
+              disabled={this.state.stateUserRegistered}
               InputLabelProps={{
                 shrink: true,
               }}
-              disabled={false}
-              variant="outlined"
+              fullWidth
             />
-            {this.state.stateUserRegistered &&
-            !this.state.stateSearchingForOpponent ? (
-              <Button>Copy</Button>
-            ) : null}
-          </Box>
-        </Container>
+
+            <FormControl variant="filled" fullWidth>
+              <InputLabel htmlFor="age-native-helper">MTGA Mode</InputLabel>
+              <Select
+                onChange={e =>
+                  this.setState({ stateModeSelect: e.target.value })
+                }
+                disabled={this.state.stateUserRegistered}
+                value={this.state.stateModeSelect}
+              >
+                <MenuItem value="brawl">Brawl</MenuItem>
+                <MenuItem value="jank">Jank</MenuItem>
+                <MenuItem value="pauper">Pauper</MenuItem>
+                <MenuItem value="artisan">Artisan</MenuItem>
+              </Select>
+            </FormControl>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "20px",
+                marginBottom: "20px",
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => this.register()}
+                disabled={this.state.stateUserRegistered}
+                color="primary"
+              >
+                Register
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => this.unregister()}
+                disabled={!this.state.stateUserRegistered}
+                color="secondary"
+              >
+                Unregister
+              </Button>
+            </Box>
+            {this.state.stateSearchingForOpponent ? <LinearProgress /> : null}
+            <Box style={classes.root}>
+              <TextField
+                style={classes.input}
+                id="filled-read-only-input"
+                label="Opponent MTGA Tag"
+                value={this.state.stateOpponentUsername}
+                margin="normal"
+                InputProps={{
+                  readOnly: true,
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                disabled={false}
+                variant="outlined"
+              />
+              {this.state.stateUserRegistered &&
+              !this.state.stateSearchingForOpponent ? (
+                <Button>Copy</Button>
+              ) : null}
+            </Box>
+          </Container>
+        </Fade>
       </Layout>
     )
   }
 }
-export default withStyles(styles)(SecondPage)
+export default MAMMPage
