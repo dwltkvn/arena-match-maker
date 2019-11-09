@@ -56,7 +56,6 @@ class MAMMPage extends React.Component {
     this.setState({ stateComponentMounted: true })
     if (typeof Storage !== "undefined") {
       // Code for localStorage/sessionStorage.
-      console.log("Storage available")
       const prevUsername = localStorage.getItem("username")
       if (prevUsername) this.refUserInput.value = prevUsername
 
@@ -92,22 +91,32 @@ class MAMMPage extends React.Component {
         firebase
           .database()
           .ref(fbpath)
-          .on(
-            "value",
-            snapshot =>
-              (snapshot.val() &&
-                snapshot.val().opponent &&
-                snapshot.val().opponent.username &&
+          .on("value", snapshot => {
+            if (snapshot.val() && snapshot.val().opponent) {
+              if (snapshot.val().opponent.username) {
                 this.setState({
+                  // opponent/username valid
+                  stateUserRegistered: true,
                   stateOpponentUsername: snapshot.val().opponent.username,
                   stateSearchingForOpponent: false,
-                })) ||
-              ""
-          )
-        this.setState({
-          stateUserRegistered: true,
-          stateSearchingForOpponent: true,
-        })
+                })
+              } else {
+                // no username
+                this.setState({
+                  stateUserRegistered: true,
+                  stateOpponentUsername: "",
+                  stateSearchingForOpponent: true,
+                })
+              }
+            } else {
+              // no opponent field
+              this.setState({
+                stateUserRegistered: true,
+                stateOpponentUsername: "",
+                stateSearchingForOpponent: true,
+              })
+            }
+          })
       })
       .catch(error => this.setState({ stateUserRegistered: false }))
   }
