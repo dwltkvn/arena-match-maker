@@ -24,25 +24,35 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <>
+    <div
+      style={{
+        border: "dashed red",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Header siteTitle={data.site.siteMetadata.title} />
       <div
         style={{
-          //border: "dashed red",
+          border: "dashed green",
           margin: `0 auto`,
           maxWidth: 960,
           padding: `0px 1.0875rem 1.45rem`,
           paddingTop: 0,
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <main>{children}</main>
+        <main style={{ flex: 1 }}>{children}</main>
         <footer>
           © {new Date().getFullYear()}, Built with
           {` `}
           <a href="https://www.gatsbyjs.org">Gatsby</a>
         </footer>
       </div>
-    </>
+    </div>
   )
 }
 
